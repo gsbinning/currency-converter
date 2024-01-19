@@ -8,8 +8,22 @@ const worthSecondEl = document.getElementById("worth-second");
 
 const exchangeRateEl = document.getElementById("exchange-rate");
 
+updateRate();
+
 function updateRate() {
-  console.log("Called");
+  fetch(
+    `https://v6.exchangerate-api.com/v6/334d3021248deee9b59f6a05/latest/${currencyFirstEl.value}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      const rate = data.conversion_rates[currencySecondEl.value];
+      console.log(rate);
+      exchangeRateEl.innerText = `1 ${currencyFirstEl.value} = ${
+        rate + " " + currencySecondEl.value
+      }`;
+
+      worthSecondEl.value = (worthFirstEl.value * rate).toFixed(2);
+    });
 }
 
 currencyFirstEl.addEventListener("change", updateRate);
